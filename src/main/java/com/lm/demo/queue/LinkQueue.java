@@ -6,9 +6,11 @@ public class LinkQueue {
 
     public Node head;
     public Node tail;
+    public int len;
 
     public boolean enqueue (int item) {
         Node node = Node.createNode(item);
+        this.len ++;
         if (tail == null){
             head = tail = node;
             return true;
@@ -22,6 +24,7 @@ public class LinkQueue {
         if (head == null) throw new RuntimeException("queue is empty");
         int data = head.data;
         head = head.next;
+        this.len--;
         if (head == null) {
             tail = null;
         }
@@ -35,11 +38,13 @@ public class LinkQueue {
         queue.enqueue(3);
         queue.enqueue(4);
         queue.enqueue(5);
+        System.out.println(queue.len);
         System.out.println(queue.dequeue());
         System.out.println(queue.dequeue());
         System.out.println(queue.dequeue());
         System.out.println(queue.dequeue());
         System.out.println(queue.dequeue());
+        System.out.println(queue.len);
     }
 
 }
