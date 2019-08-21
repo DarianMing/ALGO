@@ -1,6 +1,9 @@
 package com.lm.demo.list;
 
+import java.util.LinkedHashMap;
+
 /**
+ * 缓存淘汰策略LRU链表实现
  * @author lm
  * @since 2019-08-16 18:11
  **/
@@ -11,11 +14,11 @@ public class LRULinkedList {
      */
     private final static int DEFAULT_CAPACITY = 10;
 
-    public Node head;
+    private Node head;
 
-    public int length;
+    private int length;
 
-    public int capacity;
+    private int capacity;
 
     public LRULinkedList () {
         this.capacity = DEFAULT_CAPACITY;
@@ -23,16 +26,16 @@ public class LRULinkedList {
         this.length = 0;
     }
 
-    public LRULinkedList (int capacity) {
+    private LRULinkedList (int capacity) {
         this.capacity = capacity;
         this.head = Node.createNode(0);
         this.length = 0;
     }
 
-    public Node findPre (int item) {
+    private Node findPre (int item) {
         if (head.next == null) return null;
         Node cur = head;
-        while (cur != null){
+        while (cur.next != null){
             if (cur.next.data == item){
                 return cur;
             }
@@ -41,7 +44,7 @@ public class LRULinkedList {
         return null;
     }
 
-    public Node deleteHead () {
+    private Node deleteHead() {
         if (head.next == null) return null;
         Node delNode = head.next;
         head.next = head.next.next;
@@ -49,7 +52,8 @@ public class LRULinkedList {
         return delNode;
     }
 
-    public boolean addTail (Node node) {
+    private boolean addTail (Node node) {
+        this.length++;
         if (head.next == null) {
             head.next = node;
             return true;
@@ -59,17 +63,17 @@ public class LRULinkedList {
             cur = cur.next;
         }
         cur.next = node;
-        this.length++;
         return true;
     }
 
-    public boolean offer (int data) {
+    private boolean offer (int data) {
         Node node = Node.createNode(data);
         Node pre = findPre(data);
         if (pre != null) {
             pre.next = pre.next.next;
+            this.length--;
         } else {
-            if (length == capacity) {
+            if (this.length == this.capacity) {
                 deleteHead();
             }
         }
@@ -77,7 +81,7 @@ public class LRULinkedList {
     }
 
 
-    public void printAll (){
+    private void printAll (){
         Node cur = head.next;
         while (cur != null) {
             System.out.print(cur.data + " ");
@@ -87,12 +91,14 @@ public class LRULinkedList {
     }
 
     public static void main(String[] args) {
-        LRULinkedList lruLinkedList = new LRULinkedList(10);
+        LRULinkedList lruLinkedList = new LRULinkedList(5);
         lruLinkedList.offer(1);
         lruLinkedList.offer(2);
         lruLinkedList.offer(3);
         lruLinkedList.offer(4);
         lruLinkedList.offer(5);
+        lruLinkedList.offer(2);
+        lruLinkedList.offer(6);
         lruLinkedList.printAll();
     }
 

@@ -2,6 +2,7 @@ package com.lm.demo.tree;
 
 /**
  *  二叉查找树 非完全二叉树
+ *  中序遍历二叉查找树可以输出有序的数据序列，时间复杂度是O(n),非常高效，因此二叉查找树也叫二叉排序树
  */
 public class BinarySearchTree {
 
@@ -101,6 +102,58 @@ public class BinarySearchTree {
         }
     }
 
+    private void delete1 (int data) {
+        //待删除的节点，初始化指向根节点
+        TreeNode delNode = tree;
+        //待删除节点的父节点
+        TreeNode parent = null;
+        while (delNode != null && delNode.data != data) {
+            parent = delNode;
+            if (delNode.data < data) {
+                delNode = delNode.right;
+            } else {
+                delNode = delNode.left;
+            }
+        }
+        if (delNode == null) return;
+        //待删除节点有两个子节点
+        if (delNode.left != null && delNode.right != null) {
+            //待删除节点右子树的最小节点
+            TreeNode mostLeft = delNode.right;
+            //待删除节点右子树的最小节点的父节点
+            TreeNode mostLeftParent = delNode;
+            while (mostLeft.left != null) {
+                mostLeftParent = mostLeft;
+                mostLeft = mostLeft.left;
+            }
+            //交换待删除节点右子树的最小节点和待删除节点的数据
+            delNode.data = mostLeft.data;
+            //更新待删除节点的父节点
+            parent = mostLeftParent;
+            //更新待删除节点 此节点有右子节点或没有子节点
+            delNode = mostLeft;
+        }
+        //待删除节点的子节点
+        TreeNode child;
+        if (delNode.left != null) {
+            child = delNode.left;
+        } else if (delNode.right != null) {
+            child = delNode.right;
+        } else {
+            child = null;
+        }
+        if (parent == null) tree = null;
+        else if (parent.left == delNode) parent.left = child;
+        else parent.right = child;
+    }
+
+    private int height (TreeNode node) {
+        if (node == null) return 0;
+        int lh = node.left == null ? 0 : height(node.left) + 1;
+        int rh = node.right == null ? 0 : height(node.right) + 1;
+        return lh > rh ? lh : rh;
+    }
+
     private TreeNode findMostLeft (TreeNode treeNode) {
         if (treeNode == null) return null;
         if (treeNode.left == null) return treeNode;
@@ -134,8 +187,13 @@ public class BinarySearchTree {
         System.out.println(searchNode == null ? -1 : searchNode.data);
         TreeNode mostLeft = searchTree.findMostLeft(node3);
         System.out.println(mostLeft == null ? -1 : mostLeft.data);
-        searchTree.delete(18);
+        //searchTree.delete(18);
+        searchTree.delete1(18);
         print.levelOrder(searchTree.tree);
+        //中序遍历二叉查找树可以输出有序的数据序列，时间复杂度是O(n),非常高效
+        print.inOrder(searchTree.tree);
+        System.out.println();
+        System.out.println(searchTree.height(searchTree.tree));
     }
 
 
