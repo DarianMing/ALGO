@@ -16,7 +16,7 @@ public class Heap {
         a[++count] = data;
         int i = count;
         while (i/2 > 0 && a[i] > a[i/2]){ //自下往上堆化
-            swap(i , i/2);
+            swap(a ,i , i/2);
             i = i/2;
         }
     }
@@ -34,24 +34,53 @@ public class Heap {
         while (true){
             int maxPos = i;
             if (i * 2 <= count && a[i] < a[i*2]) maxPos = i*2;
-            if (i * 2 + 1 <= count && a[i] < a[i*2+1]) maxPos = i*2+1;
+            if (i * 2 + 1 <= count && a[maxPos] < a[i*2+1]) maxPos = i*2+1;
             if (maxPos == i) break;
-            swap(maxPos , i);
+            swap(a ,maxPos , i);
             i = maxPos;
         }
     }
 
-    public void print () {
+    public void adjustUpToButton (int[] a , int n , int i) {
+        while (true) {
+            int maxPos = i;
+            if (i * 2 <= n && a[i] < a[i * 2]) maxPos = i*2;
+            if (i * 2 + 1 <= n && a[maxPos] < a[i * 2 + 1]) maxPos = i*2+1;
+            if (maxPos == i) break;
+            swap(a , i , maxPos);
+            System.out.println("i = " + i + " maxPos = " + maxPos);
+            i = maxPos;
+        }
+    }
+
+    public void print (int[] a , int count) {
         for (int i = 1; i <= count; i++) {
             System.out.print(a[i] + " ");
         }
         System.out.println();
     }
 
-    private void swap (int i , int j) {
+    public void sort (int[] a) {
+        buildHeap(a);
+        int k = a.length - 1;
+        while (k > 1) {
+            swap(a , 1 , k);
+            k--;
+            adjustUpToButton(a , k , 1);
+        }
+    }
+
+    private void swap (int[] a ,int i , int j) {
         int tmp = a[i];
         a[i] = a[j];
         a[j] = tmp;
+    }
+
+    public void buildHeap (int[] a) {
+        int n = a.length - 1;
+        for (int i = n / 2; i >= 1 ; i--) {
+            adjustUpToButton(a , n , i);
+        }
     }
 
     public static void main(String[] args) {
@@ -70,7 +99,12 @@ public class Heap {
         heap.insert(1);
         heap.insert(2);
         heap.insert(22);
-        heap.print();
+        heap.print(heap.a , heap.count);
+        int[] a = new int[]{-1,7,5,19,8,4,1,20,13,16};
+        heap.sort(a);
+        heap.print(a , a.length - 1);
+//        heap.buildHeap(a);
+//        heap.print(a , a.length - 1);
     }
 
 }
