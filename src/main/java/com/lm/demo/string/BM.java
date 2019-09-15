@@ -1,7 +1,6 @@
 package com.lm.demo.string;
 
-import java.util.HashMap;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class BM {
 
@@ -42,11 +41,21 @@ public class BM {
 
     public static void main(String[] args) {
         BM bm = new BM();
+//        LocalDateTime
         String s1 = "compareString";
         String s2 = "compareString";
         String s3 = "compareStrStr";
         String s4 = "ring";
         System.out.println(bm.bm(s1 , s4));
+
+        for (int i = 10000; i > 0; i--) {
+            System.out.println("Hello World!");
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
 
