@@ -46,7 +46,7 @@ public class LinkedList {
             if (fast.next != null) {
                 fast = fast.next;
             }
-        }[]
+        }
         System.out.println(low.data);
     }
 
